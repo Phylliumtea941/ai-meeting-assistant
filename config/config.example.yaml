@@ -15,6 +15,12 @@ api_keys:
 # OpenRouter: Check https://openrouter.ai/models
 model: "gpt-4-turbo-preview"
 
+# Transcription Settings
+transcription:
+  whisper_model: "base"  # tiny, base, small, medium, large
+  language: null  # null for auto-detect, or specify: "en", "es", "fr", "de", "zh", "ja", etc.
+  # Full list: https://github.com/openai/whisper#available-models-and-languages
+
 # Analysis Options
 analysis:
   generate_summary: true
@@ -22,11 +28,6 @@ analysis:
   extract_decisions: true
   extract_questions: true
   answer_questions: true  # Interactive Q&A mode
-
-# Transcription Settings
-transcription:
-  whisper_model: "base"  # tiny, base, small, medium, large
-  language: null  # null for auto-detect, or "en", "es", etc.
 
 # Output Settings
 output:

@@ -5,9 +5,18 @@ import subprocess
 from pathlib import Path
 from pyannote.audio import Pipeline
 import whisper
+import yaml
 
 def log(msg):
     print(f"[TRANSCRIBE] {msg}", flush=True)
+
+def load_config():
+    """Load configuration if it exists"""
+    config_path = Path(__file__).parent.parent / "config" / "config.yaml"
+    if config_path.exists():
+        with open(config_path) as f:
+            return yaml.safe_load(f)
+    return None
 
 if len(sys.argv) < 2:
     log("ERROR: No audio file provided")
@@ -19,6 +28,19 @@ if not input_file.exists():
     sys.exit(1)
 
 log(f"Processing: {input_file.name}")
+
+# Load config
+config = load_config()
+language = None
+whisper_model_size = "base"
+
+if config and 'transcription' in config:
+    language = config['transcription'].get('language')
+    whisper_model_size = config['transcription'].get('whisper_model', 'base')
+    if language:
+        log(f"Language set to: {language}")
+    else:
+        log("Language: auto-detect")
 
 # Convert to WAV
 wav_file = input_file.with_suffix('.wav')
@@ -37,19 +59,23 @@ if not hf_token:
 
 diarization_pipeline = Pipeline.from_pretrained(
     "pyannote/speaker-diarization",
-    use_auth_token=hf_token  # Changed from use_auth_token
+    use_auth_token=hf_token
 )
 
-log("Loading Whisper model...")
-whisper_model = whisper.load_model("base")
+log(f"Loading Whisper model ({whisper_model_size})...")
+whisper_model = whisper.load_model(whisper_model_size)
 
 # Run diarization
 log("Running speaker diarization...")
 diarization = diarization_pipeline(str(wav_file))
 
-# Run transcription
+# Run transcription with language support
 log("Running transcription...")
-transcription = whisper_model.transcribe(str(wav_file))
+transcription_options = {}
+if language:
+    transcription_options['language'] = language
+
+transcription = whisper_model.transcribe(str(wav_file), **transcription_options)
 
 # Merge results
 log("Merging speaker labels with transcription...")
@@ -71,7 +97,11 @@ for segment in transcription['segments']:
 
 # Save output
 output_file = input_file.with_name(f"{input_file.stem}_transcript.txt")
-with open(output_file, 'w') as f:
+with open(output_file, 'w', encoding='utf-8') as f:
     f.write('\n'.join(output_lines))
 
 log(f"COMPLETE! Output: {output_file}")
+
+# Log detected language if auto-detect was used
+if not language and 'language' in transcription:
+    log(f"Detected language: {transcription['language']}")

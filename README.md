@@ -80,6 +80,55 @@ analysis:
   answer_questions: true
 ```
 
+## Language Support
+
+Whisper supports 99+ languages. You can either:
+
+**Auto-detect (default):**
+```yaml
+transcription:
+  language: null
+```
+
+**Specify language explicitly:**
+```yaml
+transcription:
+  language: "es"  # Spanish
+```
+
+### Supported Languages
+
+Common language codes:
+- `en` - English
+- `es` - Spanish
+- `fr` - French
+- `de` - German
+- `zh` - Chinese
+- `ja` - Japanese
+- `ko` - Korean
+- `pt` - Portuguese
+- `ru` - Russian
+- `ar` - Arabic
+- `hi` - Hindi
+- `it` - Italian
+
+Full list: [Whisper Language Support](https://github.com/openai/whisper#available-models-and-languages)
+
+### Adding New Language Support
+
+To add support for a new language:
+
+1. Check if Whisper supports it in the [official list](https://github.com/openai/whisper#available-models-and-languages)
+2. Add the language code to `config/config.yaml`:
+```yaml
+   transcription:
+     language: "your_language_code"
+```
+3. Test with a sample audio file in that language
+4. For best results with non-English languages, use `medium` or `large` Whisper models
+
+**Note:** Speaker diarization (pyannote.audio) is language-agnostic and works across all languages.
+
 ## Project Structure
 ```
 ai-meeting-assistant/
