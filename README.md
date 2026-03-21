@@ -213,3 +213,43 @@ MIT License - see [LICENSE](LICENSE) file for details
 ---
 
 ⭐ If you find this useful, please star the repo!
+
+## Translation Support
+
+The tool can translate non-English audio directly to English while maintaining speaker labels.
+
+### Setup Translation
+
+In `config/config.yaml`:
+```yaml
+transcription:
+  whisper_model: "medium"  # Use medium or large for better translation
+  language: "gu"  # Source language (e.g., Gujarati)
+  translate_to_english: true  # Enable translation
+```
+
+### Examples
+
+**Gujarati → English:**
+```yaml
+transcription:
+  whisper_model: "medium"
+  language: "gu"
+  translate_to_english: true
+```
+
+**Spanish → English:**
+```yaml
+transcription:
+  whisper_model: "base"
+  language: "es"
+  translate_to_english: true
+```
+
+**Output Example:**
+```
+[SPEAKER_00] Good morning, how are you today?
+[SPEAKER_01] I am doing well, thank you for asking.
+```
+
+**Note:** Translation works for any language Whisper supports. The audio is in the source language, but the transcript is in English with speaker labels preserved.

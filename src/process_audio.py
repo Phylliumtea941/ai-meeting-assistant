@@ -33,11 +33,16 @@ log(f"Processing: {input_file.name}")
 config = load_config()
 language = None
 whisper_model_size = "base"
+translate_to_english = False
 
 if config and 'transcription' in config:
     language = config['transcription'].get('language')
     whisper_model_size = config['transcription'].get('whisper_model', 'base')
-    if language:
+    translate_to_english = config['transcription'].get('translate_to_english', False)
+    
+    if translate_to_english and language and language != 'en':
+        log(f"Translation mode: {language} → English")
+    elif language:
         log(f"Language set to: {language}")
     else:
         log("Language: auto-detect")
@@ -69,13 +74,16 @@ whisper_model = whisper.load_model(whisper_model_size)
 log("Running speaker diarization...")
 diarization = diarization_pipeline(str(wav_file))
 
-# Run transcription with language support
-log("Running transcription...")
-transcription_options = {}
-if language:
-    transcription_options['language'] = language
-
-transcription = whisper_model.transcribe(str(wav_file), **transcription_options)
+# Run transcription or translation
+if translate_to_english and language and language != 'en':
+    log(f"Translating {language} audio to English...")
+    transcription = whisper_model.transcribe(str(wav_file), language=language, task='translate')
+else:
+    log("Running transcription...")
+    transcription_options = {}
+    if language:
+        transcription_options['language'] = language
+    transcription = whisper_model.transcribe(str(wav_file), **transcription_options)
 
 # Merge results
 log("Merging speaker labels with transcription...")

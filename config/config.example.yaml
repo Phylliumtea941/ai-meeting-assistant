@@ -18,7 +18,8 @@ model: "gpt-4-turbo-preview"
 # Transcription Settings
 transcription:
   whisper_model: "base"  # tiny, base, small, medium, large
-  language: null  # null for auto-detect, or specify: "en", "es", "fr", "de", "zh", "ja", etc.
+  language: null  # null for auto-detect, or specify: "en", "es", "fr", "de", "gu", "hi", etc.
+  translate_to_english: false  # Set to true to translate non-English audio to English
   # Full list: https://github.com/openai/whisper#available-models-and-languages
 
 # Analysis Options
