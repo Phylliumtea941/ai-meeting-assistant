@@ -79,55 +79,43 @@ analysis:
   extract_action_items: true
   answer_questions: true
 ```
+## Language Configuration
 
-## Language Support
+The tool uses `config/config.yaml` for language and model settings. **Note:** This file doesn't exist by default - you create it from the example.
 
-Whisper supports 99+ languages. You can either:
+### Setup
+```bash
+# Copy the example configuration
+cp config/config.example.yaml config/config.yaml
+
+# Edit with your preferred editor
+nano config/config.yaml
+```
+
+### Language Examples
 
 **Auto-detect (default):**
 ```yaml
 transcription:
+  whisper_model: "base"
   language: null
 ```
 
-**Specify language explicitly:**
+**Gujarati:**
 ```yaml
 transcription:
-  language: "es"  # Spanish
+  whisper_model: "medium"  # Recommended for Indian languages
+  language: "gu"
 ```
 
-### Supported Languages
-
-Common language codes:
-- `en` - English
-- `es` - Spanish
-- `fr` - French
-- `de` - German
-- `zh` - Chinese
-- `ja` - Japanese
-- `ko` - Korean
-- `pt` - Portuguese
-- `ru` - Russian
-- `ar` - Arabic
-- `hi` - Hindi
-- `it` - Italian
-
-Full list: [Whisper Language Support](https://github.com/openai/whisper#available-models-and-languages)
-
-### Adding New Language Support
-
-To add support for a new language:
-
-1. Check if Whisper supports it in the [official list](https://github.com/openai/whisper#available-models-and-languages)
-2. Add the language code to `config/config.yaml`:
+**Spanish:**
 ```yaml
-   transcription:
-     language: "your_language_code"
+transcription:
+  whisper_model: "base"
+  language: "es"
 ```
-3. Test with a sample audio file in that language
-4. For best results with non-English languages, use `medium` or `large` Whisper models
 
-**Note:** Speaker diarization (pyannote.audio) is language-agnostic and works across all languages.
+**Tip:** For Indian languages (Gujarati, Hindi, Tamil, etc.), use `medium` or `large` models for better accuracy.
 
 ## Project Structure
 ```
