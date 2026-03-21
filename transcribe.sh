@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 if [ -z "$1" ]; then
     echo "Usage: $0 <audio-file>"
@@ -21,4 +20,4 @@ docker run --rm \
     -e HF_TOKEN="$HF_TOKEN" \
     -v "$(pwd)":/app \
     transcriber \
-    python process_audio.py "/app/$AUDIO_FILE"
+    python src/process_audio.py "/app/$AUDIO_FILE"
